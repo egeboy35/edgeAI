@@ -64,12 +64,18 @@ class Tools:
     _SKIP = {".git", "node_modules", "__pycache__", ".next", ".venv", "dist", "build"}
 
     def __init__(self, root="."):
-        self.root = os.path.abspath(root)
+        self.root = os.path.realpath(root)
 
     # ----------------------------------------------------------------- safety
+    def _inside(self, real_path):
+        return real_path == self.root or real_path.startswith(self.root + os.sep)
+
     def _resolve(self, path):
-        p = os.path.abspath(os.path.join(self.root, path))
-        if p != self.root and not p.startswith(self.root + os.sep):
+        # realpath, not abspath: abspath collapses ".." but leaves symlinks
+        # unresolved, so "link/secret" still passes the prefix test while
+        # open() follows the link straight out of the project.
+        p = os.path.realpath(os.path.join(self.root, path))
+        if not self._inside(p):
             raise ValueError("path escapes the project root: %s" % path)
         return p
 
@@ -81,7 +87,11 @@ class Tools:
         for dirpath, dirnames, filenames in os.walk(base):
             dirnames[:] = [d for d in dirnames if d not in self._SKIP]
             for fn in filenames:
-                yield os.path.join(dirpath, fn)
+                fp = os.path.join(dirpath, fn)
+                # os.walk does not descend into linked directories, but it does
+                # list linked *files*, and grep/search_files would read them.
+                if self._inside(os.path.realpath(fp)):
+                    yield fp
 
     # ------------------------------------------------------------------ tools
     def read_file(self, path, start=1, end=None):
