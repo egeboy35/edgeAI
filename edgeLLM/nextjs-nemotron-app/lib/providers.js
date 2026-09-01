@@ -173,16 +173,23 @@ export function resolveBackend(backendId, options = {}) {
   const def = BACKEND_DEFAULTS[id] || BACKEND_DEFAULTS.nvidia;
 
   // baseUrl: request override → env → built-in default
-  const baseUrl =
-    (options.baseUrl && String(options.baseUrl).trim()) ||
-    process.env[def.baseUrlEnv] ||
-    def.baseUrlDefault ||
-    "";
+  const serverBaseUrl = process.env[def.baseUrlEnv] || def.baseUrlDefault || "";
+  const requestedBaseUrl = (options.baseUrl && String(options.baseUrl).trim()) || "";
+  const baseUrl = requestedBaseUrl || serverBaseUrl;
 
   // apiKey: request override → env (if backend has one) → placeholder for
   // servers that ignore auth (the OpenAI Node client rejects an empty string).
+  //
+  // A key the server holds is only ever sent to the endpoint the server itself
+  // configured. Pairing it with a caller-supplied base URL would put
+  // `Authorization: Bearer <our key>` on a request to whatever host the caller
+  // named — the caller never sees the key, but it chooses where it goes.
+  // Callers that point somewhere else must bring their own key.
   let apiKey = options.apiKey && String(options.apiKey);
-  if (!apiKey && def.keyEnv) apiKey = process.env[def.keyEnv] || "";
+  const keyWithheld = Boolean(
+    !apiKey && def.keyEnv && requestedBaseUrl && requestedBaseUrl !== serverBaseUrl
+  );
+  if (!apiKey && def.keyEnv && !keyWithheld) apiKey = process.env[def.keyEnv] || "";
   if (!apiKey) apiKey = "EMPTY";
 
   const model =
@@ -198,6 +205,10 @@ export function resolveBackend(backendId, options = {}) {
     apiKey,
     baseUrl,
     model,
+    // True when a server-held key was deliberately not applied because the
+    // caller redirected the base URL. Lets the route say so precisely.
+    keyWithheld,
+    serverBaseUrl,
   };
 }
 

@@ -59,6 +59,22 @@ export async function POST(req) {
     );
   }
 
+  // A base_url override means the server's own key is not applied — say which
+  // of the two to change rather than reporting the key as missing.
+  if (backend.keyWithheld) {
+    return Response.json(
+      {
+        error:
+          `base_url points at ${backend.baseUrl}, which is not the endpoint ` +
+          `configured for backend "${backendId}"` +
+          (backend.serverBaseUrl ? ` (${backend.serverBaseUrl})` : "") +
+          `. ${backend.keyEnv} is not sent to another host — pass your own ` +
+          `api_key with the request, or drop base_url to use the configured endpoint.`,
+      },
+      { status: 400 }
+    );
+  }
+
   // Cloud backends need a real key. Local llama.cpp and custom-without-auth
   // are fine with the "EMPTY" placeholder the resolver returns.
   if (backend.keyEnv && backend.apiKey === "EMPTY") {
