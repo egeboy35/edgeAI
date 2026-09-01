@@ -6,7 +6,7 @@
 > **Prerequisite:** [Lesson 12 — Intro](./12_vulnerability_triage_intro.md)
 > and a working `python -m pip_audit` against `sample_project/`.
 >
-> **Companion code:** [`edgeLLM/vuln-triage/triage_basic.py`](../../edgeLLM/vuln-triage/triage_basic.py)
+> **Companion code:** [`edgeLLM/vuln-triage/triage_basic.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/vuln-triage/triage_basic.py)
 > — every snippet below is an excerpt from that file.
 
 ---

@@ -13,10 +13,10 @@
 >
 > 🎞️ **Overview slides:** [**ReAct Agents ▶**](https://lkk688.github.io/edgeAI/slides/react-agent.html)
 >
-> **Companion code** — the installable [`edge_agent`](../../edgeLLM/edge_agent/) package:
-> [`tools.py`](../../edgeLLM/edge_agent/src/edge_agent/tools.py) ·
-> [`react_loop.py`](../../edgeLLM/edge_agent/src/edge_agent/react_loop.py) ·
-> [`tool_calling.py`](../../edgeLLM/edge_agent/src/edge_agent/tool_calling.py)
+> **Companion code** — the installable [`edge_agent`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent) package:
+> [`tools.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent/src/edge_agent/tools.py) ·
+> [`react_loop.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent/src/edge_agent/react_loop.py) ·
+> [`tool_calling.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent/src/edge_agent/tool_calling.py)
 >
 > ```bash
 > pip install -e edgeLLM/edge_agent      # then:  from edge_agent import ReActAgent, Tools
@@ -77,7 +77,7 @@ backend *does* support structured tool-calling, you can use that instead — see
 
 ---
 
-## 3. 🧰 The tools — [`edge_agent/tools.py`](../../edgeLLM/edge_agent/src/edge_agent/tools.py)
+## 3. 🧰 The tools — [`edge_agent/tools.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent/src/edge_agent/tools.py)
 
 We give the agent the same five verbs a human coder uses. Every path is
 **confined to a project root**, so the agent cannot wander outside the folder
@@ -114,7 +114,7 @@ model can recover from rather than a crash.
 
 ---
 
-## 4. 🧠 The loop — [`react_loop.py`](../../edgeLLM/edge_agent/src/edge_agent/react_loop.py)
+## 4. 🧠 The loop — [`react_loop.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent/src/edge_agent/react_loop.py)
 
 The whole engine is one class. It is deliberately **decoupled from any HTTP
 client**: you hand it a `complete(messages) -> str` callable, so the same loop
@@ -191,7 +191,7 @@ Action Input: {"pattern": "requests.get"}
 ## 6. 🔌 Two ways to call tools — and where each fits
 
 `react_loop.py` uses the **text protocol** (works everywhere).
-[`tool_calling.py`](../../edgeLLM/edge_agent/src/edge_agent/tool_calling.py) does the same job with the
+[`tool_calling.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent/src/edge_agent/tool_calling.py) does the same job with the
 provider's **native** `tools=` field (structured JSON function-calling):
 
 ```bash

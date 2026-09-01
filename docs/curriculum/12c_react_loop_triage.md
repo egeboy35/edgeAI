@@ -6,7 +6,7 @@
 > **Prerequisite:** [Lesson 12b](./12b_basic_tool_calling_triage.md).
 > You should have `triage_basic.py` working end-to-end.
 >
-> **Companion code:** [`edgeLLM/vuln-triage/triage_react.py`](../../edgeLLM/vuln-triage/triage_react.py).
+> **Companion code:** [`edgeLLM/vuln-triage/triage_react.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/vuln-triage/triage_react.py).
 
 ---
 

@@ -10,7 +10,7 @@
 > [NVIDIA Build API](https://build.nvidia.com), and you will run it on the
 > Jetson Orin Nano you have used in previous labs.
 >
-> **Companion code:** [`edgeLLM/nextjs-nemotron-app/`](../../edgeLLM/nextjs-nemotron-app/)
+> **Companion code:** [`edgeLLM/nextjs-nemotron-app/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app)
 > — every snippet below is an excerpt from this folder; you can read or run
 > the whole project end-to-end.
 >
@@ -27,7 +27,7 @@
 | 1 | **What is Next.js, and why use it for AI apps?** | Frames the React/Node toolchain we will use. |
 | 2 | **What is the NVIDIA Build API + Nemotron?** | Frames the backend we will call. |
 | 3 | **Project scaffold and prerequisites** | Sets up Node 20 on your laptop and Jetson. |
-| 4 | **Step-by-step build** of [`nextjs-nemotron-app`](../../edgeLLM/nextjs-nemotron-app/) | Walks every file we just wrote. |
+| 4 | **Step-by-step build** of [`nextjs-nemotron-app`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app) | Walks every file we just wrote. |
 | 5 | **Run on Jetson Orin Nano** (`ssh jetsonorin`) | Deploys to your real edge device. |
 | 6 | **In-class exercises** | Hands-on prompts to try with the chat lab. |
 | 7 | **Bonus lab — embedding search + rerank** | Adds a `/retrieval` page calling `nv-embedqa-e5-v5` + `rerank-qa-mistral-4b`. |
@@ -52,7 +52,7 @@ Next.js bundles all of that. The three concepts that matter for this lesson:
 ### 1.1 The App Router and file-based routing
 
 In Next.js (App Router), the URL of every page or API is determined by the
-**path of its source file** under [`app/`](../../edgeLLM/nextjs-nemotron-app/app/):
+**path of its source file** under [`app/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app):
 
 | File                          | URL served                     |
 |-------------------------------|--------------------------------|
@@ -406,7 +406,7 @@ npm -v        # → 10.8.2
 ### 3.2 Project layout we will build
 
 Everything lives under
-[`edgeLLM/nextjs-nemotron-app/`](../../edgeLLM/nextjs-nemotron-app/). The app
+[`edgeLLM/nextjs-nemotron-app/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app). The app
 is a *multi-lab* mini-site — three pages share a sticky top **NavBar**:
 
 ```
@@ -476,7 +476,7 @@ serves both. See §9 and §10 for details.
 The recipe for adding a fourth lab later is mechanical: drop a
 `app/<new>/page.js` + a `components/<NewLab>.js`, register a server route
 under `app/api/<new>/route.js`, and add one entry to the `LABS` array in
-[`NavBar.js`](../../edgeLLM/nextjs-nemotron-app/app/components/NavBar.js).
+[`NavBar.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/NavBar.js).
 
 ---
 
@@ -486,7 +486,7 @@ You can either type along, or just open the files in the companion folder.
 
 ### Step 1 — `package.json`
 
-Open [`edgeLLM/nextjs-nemotron-app/package.json`](../../edgeLLM/nextjs-nemotron-app/package.json):
+Open [`edgeLLM/nextjs-nemotron-app/package.json`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/package.json):
 
 ```json
 {
@@ -550,7 +550,7 @@ file is git-ignored.
 
 ### Step 3 — Root layout with a shared NavBar
 
-[`app/layout.js`](../../edgeLLM/nextjs-nemotron-app/app/layout.js) defines the
+[`app/layout.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/layout.js) defines the
 HTML shell around every page. It is a Server Component, and it mounts our
 single `<NavBar/>` once so the navigation persists across every lab:
 
@@ -575,7 +575,7 @@ export default function RootLayout({ children }) {
 ```
 
 The NavBar itself lives in
-[`app/components/NavBar.js`](../../edgeLLM/nextjs-nemotron-app/app/components/NavBar.js)
+[`app/components/NavBar.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/NavBar.js)
 and is a **Client Component** because it needs to read the current URL to
 highlight the active tab:
 
@@ -634,7 +634,7 @@ Three Next.js details worth pausing on:
 3. **Adding a new lab is one edit.** Drop a new entry into the `LABS`
    array, create the matching `app/<slug>/page.js`, and the nav picks it up.
 
-[`app/page.js`](../../edgeLLM/nextjs-nemotron-app/app/page.js) is the home
+[`app/page.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/page.js) is the home
 page. Still a Server Component — it does nothing more than mount the
 interactive client component:
 
@@ -656,7 +656,7 @@ only the interactive island to the browser.
 
 ### Step 4 — The model list route (`GET /api/models`)
 
-[`app/api/models/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/models/route.js):
+[`app/api/models/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/models/route.js):
 
 ```js
 export const dynamic = "force-dynamic";
@@ -693,7 +693,7 @@ curl -s http://localhost:3000/api/models | jq
 
 ### Step 5 — The chat route (`POST /api/chat`) — the heart of the app
 
-[`app/api/chat/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/chat/route.js)
+[`app/api/chat/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/chat/route.js)
 proxies the browser's request to NVIDIA Build and streams the response back.
 
 The whole file is about 70 lines; the important pieces are below.
@@ -801,7 +801,7 @@ You will see a sequence of `data: { ... }` chunks ending with `data: [DONE]`.
 
 ### Step 6 — The streaming Client Component
 
-[`app/components/ChatUI.js`](../../edgeLLM/nextjs-nemotron-app/app/components/ChatUI.js)
+[`app/components/ChatUI.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/ChatUI.js)
 is the only piece of code that runs in the browser. The very first line is
 crucial:
 
@@ -899,7 +899,7 @@ When `thinking` is enabled, Nemotron sends two streams interleaved:
 
 This is the *visible chain of thought* feature unique to the Nemotron family
 and the closest equivalent to OpenAI's `o1-preview` style. The full bubble +
-metric layout lives in [`globals.css`](../../edgeLLM/nextjs-nemotron-app/app/globals.css).
+metric layout lives in [`globals.css`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/globals.css).
 
 ### Step 7 — Run it locally
 
@@ -1116,10 +1116,10 @@ companion folder you have been editing.
 
 | File | Purpose |
 |---|---|
-| [`app/api/embed/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/embed/route.js) | `POST /api/embed` — batch embeddings proxy |
-| [`app/api/rerank/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/rerank/route.js) | `POST /api/rerank` — cross-encoder rerank proxy |
-| [`app/retrieval/page.js`](../../edgeLLM/nextjs-nemotron-app/app/retrieval/page.js) | New page mounted at `/retrieval` |
-| [`app/components/RetrievalLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/RetrievalLab.js) | `"use client"` UI: corpus textarea, query box, two result columns |
+| [`app/api/embed/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/embed/route.js) | `POST /api/embed` — batch embeddings proxy |
+| [`app/api/rerank/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/rerank/route.js) | `POST /api/rerank` — cross-encoder rerank proxy |
+| [`app/retrieval/page.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/retrieval/page.js) | New page mounted at `/retrieval` |
+| [`app/components/RetrievalLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/RetrievalLab.js) | `"use client"` UI: corpus textarea, query box, two result columns |
 | `app/components/ChatUI.js` (edited) | Adds a “Retrieval Lab →” nav link next to the model picker |
 | `.env.local.example` (edited) | Adds `NVIDIA_EMBED_MODEL`, `NVIDIA_RERANK_URL`, `NVIDIA_RERANK_MODEL` |
 
@@ -1140,7 +1140,7 @@ NVIDIA_RERANK_MODEL=nvidia/rerank-qa-mistral-4b
 
 ### 7.2 The embedding route — `/api/embed`
 
-[`app/api/embed/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/embed/route.js):
+[`app/api/embed/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/embed/route.js):
 
 ```js
 export const runtime = "nodejs";
@@ -1185,7 +1185,7 @@ Three things to internalize:
 
 ### 7.3 The rerank route — `/api/rerank`
 
-[`app/api/rerank/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/rerank/route.js):
+[`app/api/rerank/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/rerank/route.js):
 
 ```js
 export const runtime = "nodejs";
@@ -1232,7 +1232,7 @@ rerank those K with the cross-encoder."
 
 ### 7.4 The `/retrieval` page — orchestration in the browser
 
-[`app/components/RetrievalLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/RetrievalLab.js)
+[`app/components/RetrievalLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/RetrievalLab.js)
 is where the two API calls become one user-visible workflow. The core logic
 is short:
 
@@ -1367,9 +1367,9 @@ support by promoting `messages[0].content` from a plain string to a
 
 | File | Purpose |
 |---|---|
-| [`app/api/omni/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/omni/route.js) | `POST /api/omni` — multimodal streaming proxy |
-| [`app/omni/page.js`](../../edgeLLM/nextjs-nemotron-app/app/omni/page.js) | New page mounted at `/omni` |
-| [`app/components/OmniLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/OmniLab.js) | `"use client"` UI: file pickers + streaming reasoning/answer columns |
+| [`app/api/omni/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/omni/route.js) | `POST /api/omni` — multimodal streaming proxy |
+| [`app/omni/page.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/omni/page.js) | New page mounted at `/omni` |
+| [`app/components/OmniLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/OmniLab.js) | `"use client"` UI: file pickers + streaming reasoning/answer columns |
 | `.env.local.example` (edited) | Adds `NVIDIA_OMNI_MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` |
 | `app/components/NavBar.js` (edited earlier) | The `Omni Lab` tab is the third entry in `LABS` |
 
@@ -1396,7 +1396,7 @@ the OpenAI-standard names so students learn portable knowledge.
 ### 8.3 `/api/omni` — the route handler
 
 The route is structurally the same SSE proxy you already wrote for
-[`/api/chat`](../../edgeLLM/nextjs-nemotron-app/app/api/chat/route.js). The
+[`/api/chat`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/chat/route.js). The
 only new piece is the helper that converts the incoming JSON
 (`prompt + image + audio`) into a multimodal `content` array:
 
@@ -1427,7 +1427,7 @@ function buildUserContent({ prompt, image, audio }) {
 The rest of the route is identical to `/api/chat`: build a `payload`, set
 `stream: true`, attach `chat_template_kwargs.enable_thinking` plus
 `reasoning_budget`, and return `upstream.body` as the response. See
-[`route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/omni/route.js) for the
+[`route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/omni/route.js) for the
 ~110-line file in full.
 
 > **Why `reasoning_budget`?** Omni is a *reasoning* model — by default every
@@ -1439,7 +1439,7 @@ The rest of the route is identical to `/api/chat`: build a `payload`, set
 
 ### 8.4 The Omni Lab UI
 
-[`OmniLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/OmniLab.js)
+[`OmniLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/OmniLab.js)
 is a two-column page:
 
 - **Left**: a prompt textarea, an `<input type="file" accept="image/*">`,
@@ -1679,12 +1679,12 @@ In production you'd run Uvicorn behind a process manager
 
 | File | Lines | Purpose |
 |---|---:|---|
-| [`asr_sidecar/asr_sidecar.py`](../../edgeLLM/nextjs-nemotron-app/asr_sidecar/asr_sidecar.py) | ~120 | FastAPI + Uvicorn service — Riva gRPC → SSE |
-| [`asr_sidecar/requirements.txt`](../../edgeLLM/nextjs-nemotron-app/asr_sidecar/requirements.txt) | 3 | `fastapi`, `uvicorn[standard]`, `nvidia-riva-client` |
-| [`asr_sidecar/README.md`](../../edgeLLM/nextjs-nemotron-app/asr_sidecar/README.md) | — | How to run + a `curl` smoke test |
-| [`app/api/asr/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/asr/route.js) | ~55 | Next.js route — forwards SSE from sidecar |
-| [`app/asr/page.js`](../../edgeLLM/nextjs-nemotron-app/app/asr/page.js) | ~12 | Page that mounts `<AsrLab/>` |
-| [`app/components/AsrLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/AsrLab.js) | ~380 | UI — tabs, file picker, MediaRecorder, browser PCM converter, SSE renderer |
+| [`asr_sidecar/asr_sidecar.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/asr_sidecar/asr_sidecar.py) | ~120 | FastAPI + Uvicorn service — Riva gRPC → SSE |
+| [`asr_sidecar/requirements.txt`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/asr_sidecar/requirements.txt) | 3 | `fastapi`, `uvicorn[standard]`, `nvidia-riva-client` |
+| [`asr_sidecar/README.md`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/asr_sidecar/README.md) | — | How to run + a `curl` smoke test |
+| [`app/api/asr/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/asr/route.js) | ~55 | Next.js route — forwards SSE from sidecar |
+| [`app/asr/page.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/asr/page.js) | ~12 | Page that mounts `<AsrLab/>` |
+| [`app/components/AsrLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/AsrLab.js) | ~380 | UI — tabs, file picker, MediaRecorder, browser PCM converter, SSE renderer |
 | `.env.local` adds two lines | — | `ASR_SIDECAR_URL`, `NEMOTRON_ASR_FUNCTION_ID` |
 
 ### 9.4 The Python sidecar — `asr_sidecar.py`
@@ -1774,7 +1774,7 @@ iterate responses → wrap each as SSE → return.**
 
 ### 9.5 The Next.js route — `/api/asr`
 
-[`app/api/asr/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/asr/route.js)
+[`app/api/asr/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/asr/route.js)
 is the smallest route in the project — it does *nothing* but forward the
 raw body and stream the SSE response back:
 
@@ -1812,7 +1812,7 @@ Two Node-specific details:
 
 ### 9.6 The client UI — `<AsrLab/>`
 
-[`AsrLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/AsrLab.js)
+[`AsrLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/AsrLab.js)
 has three responsibilities. We will walk each one.
 
 **(a) Get audio.** Either a file upload, or a live microphone recording via
@@ -2035,8 +2035,8 @@ itself a second time.
 |---|---|
 | **`asr_sidecar/asr_sidecar.py`** — new `POST /synthesize` endpoint | Calls `riva.client.SpeechSynthesisService` against `magpie-tts-zeroshot`. The file is now a general "Riva speech sidecar" — same Python process, two endpoints. |
 | **`asr_sidecar/requirements.txt`** — `+ python-multipart` | FastAPI needs it to parse `multipart/form-data` for `File`/`Form` parameters. |
-| [`app/api/tts/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/tts/route.js) | Next.js route — passes multipart bytes through; returns `audio/wav`. |
-| [`app/tts/page.js`](../../edgeLLM/nextjs-nemotron-app/app/tts/page.js) + [`app/components/TtsLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/TtsLab.js) | The page + client UI with file/mic tabs, browser-side WAV encoder, and an `<audio>` player. |
+| [`app/api/tts/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/tts/route.js) | Next.js route — passes multipart bytes through; returns `audio/wav`. |
+| [`app/tts/page.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/tts/page.js) + [`app/components/TtsLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/TtsLab.js) | The page + client UI with file/mic tabs, browser-side WAV encoder, and an `<audio>` player. |
 | `NavBar.js` and `.env.local.example` | New tab + new optional `MAGPIE_TTS_FUNCTION_ID` var. |
 
 ### 10.2 The Magpie TTS NVCF function
@@ -2179,7 +2179,7 @@ the UI (Next.js forwards them, the browser shows them in a metrics line).
 
 ### 10.5 The Next.js route — `/api/tts`
 
-[`app/api/tts/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/tts/route.js)
+[`app/api/tts/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/tts/route.js)
 is ~60 lines, almost all "do not transform the payload":
 
 ```js
@@ -2224,7 +2224,7 @@ all we need to do.
 
 ### 10.6 The client UI — `<TtsLab/>`
 
-[`TtsLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/TtsLab.js)
+[`TtsLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/TtsLab.js)
 mirrors the ASR lab but with the data flow inverted. Three pieces:
 
 **(a) Reference voice acquisition.** Same tabs as the ASR lab — file
@@ -2405,7 +2405,7 @@ The new lab reuses *all* the architecture you built here — the NavBar,
 the SSE pattern from `/api/chat`, the FastAPI sidecar pattern from
 `/api/asr` and `/api/tts` — and introduces one new helper used by every
 lab that needs to switch providers:
-[`lib/providers.js`](../../edgeLLM/nextjs-nemotron-app/lib/providers.js),
+[`lib/providers.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/lib/providers.js),
 which maps a model id to NVIDIA Build / OpenAI / Anthropic and reads
 `~/.env.local` for the right key.
 
@@ -2423,7 +2423,7 @@ which maps a model id to NVIDIA Build / OpenAI / Anthropic and reads
 
 ---
 
-**Source folder:** [`edgeLLM/nextjs-nemotron-app/`](../../edgeLLM/nextjs-nemotron-app/)
+**Source folder:** [`edgeLLM/nextjs-nemotron-app/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app)
 **Tested on:** Jetson Orin Nano (Ubuntu 22.04, aarch64) with Node v20.20.2,
 Next.js 15.5.18, React 19.0.0, NVIDIA Build chat endpoint
 `https://integrate.api.nvidia.com/v1/chat/completions`.

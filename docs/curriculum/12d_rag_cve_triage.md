@@ -7,9 +7,9 @@
 > have the ReAct loop working against `triage_react.py`.
 >
 > **Companion code:**
-> [`edgeLLM/vuln-triage/triage_rag.py`](../../edgeLLM/vuln-triage/triage_rag.py)
-> · [`tools/embedding_search.py`](../../edgeLLM/vuln-triage/tools/embedding_search.py)
-> · [`examples/cve_corpus.jsonl`](../../edgeLLM/vuln-triage/examples/cve_corpus.jsonl)
+> [`edgeLLM/vuln-triage/triage_rag.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/vuln-triage/triage_rag.py)
+> · [`tools/embedding_search.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/vuln-triage/tools/embedding_search.py)
+> · [`examples/cve_corpus.jsonl`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/vuln-triage/examples/cve_corpus.jsonl)
 
 ---
 
@@ -51,7 +51,7 @@ vulnerability triage that is *wasteful*:
 > pyyaml transitively but never invokes its loaders is **not exposed**."*
 
 We hand-write ~12 of these notes in
-[`examples/cve_corpus.jsonl`](../../edgeLLM/vuln-triage/examples/cve_corpus.jsonl):
+[`examples/cve_corpus.jsonl`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/vuln-triage/examples/cve_corpus.jsonl):
 
 ```json
 {"cve_id": "CVE-2020-1747", "package": "pyyaml",
@@ -75,7 +75,7 @@ the top-3 matches are typically all the prior knowledge it needs.
 
 ## 3. 🧩 Step 1 — Embed the corpus once, retrieve forever
 
-[`tools/embedding_search.py`](../../edgeLLM/vuln-triage/tools/embedding_search.py)
+[`tools/embedding_search.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/vuln-triage/tools/embedding_search.py)
 is ~90 lines. The interesting parts:
 
 ```python
@@ -143,7 +143,7 @@ _cosine` for a proper vector DB; the rest of the file does not change.
 
 ## 4. 🧩 Step 2 — Register the tool with the agent
 
-Inside [`triage_rag.py`](../../edgeLLM/vuln-triage/triage_rag.py) the
+Inside [`triage_rag.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/vuln-triage/triage_rag.py) the
 tool table grows by exactly one entry compared to 12c:
 
 ```python
@@ -334,7 +334,7 @@ agent, an oncall summarizer. Swap the tools, keep the loop.
 
 ---
 
-**Source folder:** [`edgeLLM/vuln-triage/`](../../edgeLLM/vuln-triage/)
+**Source folder:** [`edgeLLM/vuln-triage/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/vuln-triage)
 **Tested on:** Jetson Orin Nano (Ubuntu 22.04, aarch64) with Python 3.10,
 `openai 2.37.0`, `httpx 0.28.1`, `pip-audit 2.10.0`. Original verified
 run used `qwen/qwen3-coder-480b-a35b-instruct` (chat) +

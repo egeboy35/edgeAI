@@ -10,16 +10,16 @@
 > **multi-round, file-and-web agent** that reads, greps, searches,
 > writes, and edits files in a Jetson workspace, optionally backed by a
 > SerpAPI web-search tool. The agent itself is the standalone
-> [`edge_agent`](../../edgeLLM/edge_agent/) package from
+> [`edge_agent`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent) package from
 > [Lesson 13](./13_react_agent.md); the new work here is everything
 > *around* it that makes it a browser-visible lab.
 >
 > **Companion code:**
-> [`edgeLLM/nextjs-nemotron-app/lib/providers.js`](../../edgeLLM/nextjs-nemotron-app/lib/providers.js) ·
-> [`agent_sidecar/agent_sidecar.py`](../../edgeLLM/nextjs-nemotron-app/agent_sidecar/agent_sidecar.py) ·
-> [`app/api/agent/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/agent/route.js) ·
-> [`app/components/AgentLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js) ·
-> [`edgeLLM/edge_agent/`](../../edgeLLM/edge_agent/) (now v0.2.0).
+> [`edgeLLM/nextjs-nemotron-app/lib/providers.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/lib/providers.js) ·
+> [`agent_sidecar/agent_sidecar.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/agent_sidecar/agent_sidecar.py) ·
+> [`app/api/agent/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/agent/route.js) ·
+> [`app/components/AgentLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js) ·
+> [`edgeLLM/edge_agent/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent) (now v0.2.0).
 
 ---
 
@@ -124,7 +124,7 @@ Two architectural choices worth pausing on:
 
 1. **Sidecar, not pure JS.** The agent's loop, regex parser, and file
    tools already exist as a tested Python package
-   ([`edge_agent`](../../edgeLLM/edge_agent/)) used by
+   ([`edge_agent`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent)) used by
    `sjsujetsontool chat --agent`. Wrapping it in 250 lines of FastAPI
    reuses everything; a JS reimplementation would mean re-deriving the
    ReAct parser and the safe-file-path enforcement.
@@ -135,7 +135,7 @@ Two architectural choices worth pausing on:
 
 ---
 
-## 4. 🧩 The provider resolver — [`lib/providers.js`](../../edgeLLM/nextjs-nemotron-app/lib/providers.js)
+## 4. 🧩 The provider resolver — [`lib/providers.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/lib/providers.js)
 
 The chat lab in Lesson 11 hard-coded `https://integrate.api.nvidia.com/v1`
 and `NVIDIA_API_KEY`. With three labs that need to switch providers, we
@@ -214,7 +214,7 @@ labs and reuse it.
 [Lesson 13](./13_react_agent.md) introduced the standalone package
 (`tools.py`, `react_loop.py`, `tool_calling.py`). For the Agent Lab we
 made three small changes — they are all in
-[`edge_agent/src/edge_agent/tools.py`](../../edgeLLM/edge_agent/src/edge_agent/tools.py):
+[`edge_agent/src/edge_agent/tools.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent/src/edge_agent/tools.py):
 
 ### 5.1 An optional 6th tool: `web_search`
 
@@ -292,7 +292,7 @@ env-reactive answer.
 
 ## 6. 🐍 The FastAPI sidecar
 
-[`agent_sidecar/agent_sidecar.py`](../../edgeLLM/nextjs-nemotron-app/agent_sidecar/agent_sidecar.py)
+[`agent_sidecar/agent_sidecar.py`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/agent_sidecar/agent_sidecar.py)
 is the longest new file at ~250 lines — but most of it is the SSE
 emitter. The core endpoint is small:
 
@@ -386,7 +386,7 @@ worker thread waits on the model.
 
 ---
 
-## 7. 🌐 The Next.js route — [`app/api/agent/route.js`](../../edgeLLM/nextjs-nemotron-app/app/api/agent/route.js)
+## 7. 🌐 The Next.js route — [`app/api/agent/route.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/agent/route.js)
 
 The route is intentionally **thin** — it does *not* implement any
 agent logic. Two responsibilities:
@@ -438,7 +438,7 @@ re-serialisation, no buffering.
 
 ---
 
-## 8. 🎛️ The client — [`app/components/AgentLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js)
+## 8. 🎛️ The client — [`app/components/AgentLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js)
 
 The UI has three responsibilities, all React-standard:
 
@@ -656,7 +656,7 @@ One step, one observation, one final answer — no `nudge`. **`Qwen3.5-9B`
 at Q6_K_XL is large enough to follow the ReAct text protocol reliably**;
 the 0.8 B variant we tried earlier was not. Both run on the same shared
 server, so changing the model is a one-line edit in
-[`AgentLab.js`'s `node05` entry](../../edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js).
+[`AgentLab.js`'s `node05` entry](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js).
 
 The `node05` backend is what we recommend for **classroom demos where you
 don't want students to burn cloud quota**: it's free, on-prem, and the
@@ -722,7 +722,7 @@ saw:
 
 - **EOL during a semester.** NVIDIA periodically retires models. The
   symptom is **HTTP 410** with a `detail` mentioning the EOL date.
-  Update [`AgentLab.js`'s `CODING_MODELS`](../../edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js)
+  Update [`AgentLab.js`'s `CODING_MODELS`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js)
   and the `AGENT_MODEL` default in your `.env.local`. *No backend code
   change is needed.*
 - **HTTP 429 rate limits.** Free-tier quotas are modest. Agents that
@@ -791,9 +791,9 @@ more is worth doing in production:
 
 | Guardrail                                         | Where it lives |
 |---------------------------------------------------|----------------|
-| Every path is resolved under a *root* directory   | [`Tools._resolve`](../../edgeLLM/edge_agent/src/edge_agent/tools.py) — refuses to leave the root |
+| Every path is resolved under a *root* directory   | [`Tools._resolve`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent/src/edge_agent/tools.py) — refuses to leave the root |
 | Hard cap on agent steps                           | `AGENT_MAX_STEPS` env var on the sidecar |
-| `edit_file` refuses non-unique `old` snippets     | [`Tools.edit_file`](../../edgeLLM/edge_agent/src/edge_agent/tools.py) — prevents clobbering |
+| `edit_file` refuses non-unique `old` snippets     | [`Tools.edit_file`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent/src/edge_agent/tools.py) — prevents clobbering |
 | **TODO if exposing publicly**: require auth on `/api/agent` | …because anyone who reaches it can call `write_file` inside your workspace. |
 
 The default `AGENT_WORKSPACE` is a sample directory shipped *with the
@@ -826,12 +826,12 @@ folder you care about.
 
 ---
 
-**Source folders:** [`edgeLLM/edge_agent/`](../../edgeLLM/edge_agent/),
-[`edgeLLM/nextjs-nemotron-app/agent_sidecar/`](../../edgeLLM/nextjs-nemotron-app/agent_sidecar/),
-[`edgeLLM/nextjs-nemotron-app/lib/`](../../edgeLLM/nextjs-nemotron-app/lib/),
-[`edgeLLM/nextjs-nemotron-app/app/agent/`](../../edgeLLM/nextjs-nemotron-app/app/agent/),
-[`edgeLLM/nextjs-nemotron-app/app/api/agent/`](../../edgeLLM/nextjs-nemotron-app/app/api/agent/),
-[`edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js`](../../edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js).
+**Source folders:** [`edgeLLM/edge_agent/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/edge_agent),
+[`edgeLLM/nextjs-nemotron-app/agent_sidecar/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/agent_sidecar),
+[`edgeLLM/nextjs-nemotron-app/lib/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/lib),
+[`edgeLLM/nextjs-nemotron-app/app/agent/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/agent),
+[`edgeLLM/nextjs-nemotron-app/app/api/agent/`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/api/agent),
+[`edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js`](https://github.com/lkk688/edgeAI/blob/main/edgeLLM/nextjs-nemotron-app/app/components/AgentLab.js).
 
 **Tested on:** Ubuntu 24.04 LTS aarch64 (Jetson reached via
 `ssh sjsujetson@headscale.forgengi.org -p 20065`), Python 3.12,
