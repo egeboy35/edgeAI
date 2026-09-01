@@ -84,6 +84,7 @@ through Next.js.
 |-----------------------|--------------------------------------|---------|
 | `AGENT_SIDECAR_PORT`  | `8002`                               | Port Uvicorn binds to |
 | `AGENT_WORKSPACE`     | `./workspace`                        | Project dir the agent reads/edits |
+| `AGENT_ALLOWED_ROOTS` | `$AGENT_WORKSPACE`                   | `os.pathsep`-separated roots a request's `root` may name; anything outside is refused with 403 |
 | `AGENT_MAX_STEPS`     | `12`                                 | Hard cap; clients may request fewer |
 | `NVIDIA_API_KEY`      | *(none)*                             | Default key when the request omits one |
 | `SERPAPI_API_KEY`     | *(none)*                             | Enables the optional `web_search` tool |

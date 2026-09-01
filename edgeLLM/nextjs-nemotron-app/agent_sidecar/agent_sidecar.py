@@ -53,12 +53,38 @@ log = logging.getLogger("agent-sidecar")
 
 PORT = int(os.environ.get("AGENT_SIDECAR_PORT", "8002"))
 # Default workspace the agent operates on if the request does not override it.
-DEFAULT_ROOT = os.environ.get(
+DEFAULT_ROOT = os.path.realpath(os.environ.get(
     "AGENT_WORKSPACE",
     str((HERE / "workspace").resolve()),
-)
+))
+# Roots a request is allowed to name, os.pathsep-separated. A request may name
+# one of these or anything beneath it; anything else is refused. Defaults to the
+# workspace alone, which is the guarantee AGENT_WORKSPACE already implies.
+# Widen it when the agent should be able to work on several checkouts.
+ALLOWED_ROOTS = [
+    os.path.realpath(p)
+    for p in os.environ.get("AGENT_ALLOWED_ROOTS", DEFAULT_ROOT).split(os.pathsep)
+    if p.strip()
+] or [DEFAULT_ROOT]
 # Hard ceiling — the request can request fewer steps but never more.
 MAX_STEPS_HARD = int(os.environ.get("AGENT_MAX_STEPS", "12"))
+
+
+def resolve_workspace(requested: str | None) -> str:
+    """Realpath of the workspace a request asked for.
+
+    Raises ValueError when it falls outside ALLOWED_ROOTS. realpath, not
+    abspath, so a link inside an allowed root cannot name a target outside it.
+    """
+    root = os.path.realpath(requested) if requested else DEFAULT_ROOT
+    for base in ALLOWED_ROOTS:
+        if root == base or root.startswith(base + os.sep):
+            return root
+    raise ValueError(
+        "workspace %r is outside the roots this sidecar serves. "
+        "Set AGENT_ALLOWED_ROOTS to widen them (currently: %s)."
+        % (requested, os.pathsep.join(ALLOWED_ROOTS))
+    )
 
 app = FastAPI(
     title="Edge Agent Sidecar",
@@ -77,6 +103,7 @@ def health() -> dict[str, Any]:
         "tools": edge_agent.tool_names(),
         "web_search": edge_agent.web_search_available(),
         "default_root": DEFAULT_ROOT,
+        "allowed_roots": ALLOWED_ROOTS,
         "max_steps_hard": MAX_STEPS_HARD,
     }
 
@@ -119,7 +146,7 @@ async def run(request: Request) -> StreamingResponse:
     Body (JSON):
         {
           "task":        "…",                 # required
-          "root":        "/abs/path",         # optional, default workspace
+          "root":        "/abs/path",         # optional; must be under AGENT_ALLOWED_ROOTS
           "model":       "qwen/qwen3-coder-…",
           "base_url":    "https://integrate.api.nvidia.com/v1",
           "api_key":     "nvapi-…",
@@ -147,7 +174,15 @@ async def run(request: Request) -> StreamingResponse:
             status_code=400,
         )
 
-    root = os.path.abspath(body.get("root") or DEFAULT_ROOT)
+    try:
+        root = resolve_workspace(body.get("root"))
+    except ValueError as exc:
+        log.warning("refused workspace %r", body.get("root"))
+        return StreamingResponse(
+            iter([_sse({"type": "error", "message": str(exc)}), _sse_done()]),
+            media_type="text/event-stream",
+            status_code=403,
+        )
     if not os.path.isdir(root):
         return StreamingResponse(
             iter([_sse({"type": "error", "message": f"workspace does not exist: {root}"}), _sse_done()]),
